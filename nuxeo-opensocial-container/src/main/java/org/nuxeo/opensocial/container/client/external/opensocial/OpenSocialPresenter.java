@@ -45,6 +45,10 @@ public class OpenSocialPresenter extends
     public static final String OS_PERMISSIONS_ATTRIBUTE = "permission";
 
     public static final String OS_PARENT_ATTRIBUTE = "parent";
+    
+    private static final String ENCODED_LEFT_SQUARE_BRACKET = "%5B";
+
+    private static final String ENCODED_RIGHT_SQUARE_BRACKET = "%5D";
 
     public interface Display extends WidgetDisplay, HasId {
         void setUrl(String url);
@@ -111,8 +115,9 @@ public class OpenSocialPresenter extends
         }
         model.getData().setFrameUrl(
                 changeParam(model.getData().getFrameUrl(),
-                        OS_PERMISSIONS_ATTRIBUTE, "["
-                                + permissionsStr.toString() + "]"));
+                        OS_PERMISSIONS_ATTRIBUTE, ENCODED_LEFT_SQUARE_BRACKET
+                                + permissionsStr.toString() 
+                                + ENCODED_RIGHT_SQUARE_BRACKET));
     }
 
     public void setView(String view) {
