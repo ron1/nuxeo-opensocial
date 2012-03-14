@@ -60,6 +60,8 @@ public class UrlBuilder {
     private static final String VIEW_VALUE = "default";
 
     private static final String PERMISSION_KEY = "permission";
+    
+    private static final String PERMISSION_VALUE = encode("[]");
 
     private static final String PARENT_KEY = "parent";
 
@@ -94,15 +96,11 @@ public class UrlBuilder {
 
         // parent=http://localhost:8080/...
         // TODO: Verify it works... should not.
-        sb.append(PARENT_KEY + "=" + serverBase + "&");
-
-        // perm=1 -> does the session has write perm on gadget
-        // XXX: is this used ?
-        sb.append(PERMISSION_KEY + "=[]&");
+        sb.append(PARENT_KEY + "=" + encode(serverBase) + "&");
 
         // url=http://.../gadget.xml?up_prefname=prefvalue
-        sb.append(URL_KEY + "=" + gadgetDef + getUserPrefs(data.getUserPrefs())
-                + "&");
+        sb.append(URL_KEY + "=" + encode(gadgetDef) 
+                + getUserPrefs(data.getUserPrefs()) + "&");
 
         // turn on debugging for the JS (avoid compression)
         if (SHINDIG_DEBUG) {
@@ -165,12 +163,8 @@ public class UrlBuilder {
             }
 
             // TODO has to be tested
-            try {
-                prefsParams += "&" + PREF_PREFIX + pref.getName() + "="
-                        + URLEncoder.encode(value, "UTF-8");
-            } catch (UnsupportedEncodingException e) {
-                log.error(e);
-            }
+            prefsParams += "&" + PREF_PREFIX + pref.getName() + "="
+                    + encode(value);
         }
         return prefsParams;
     }
@@ -179,7 +173,16 @@ public class UrlBuilder {
         return CONTAINER_KEY + "=" + CONTAINER_VALUE + "&" + NOCACHE_KEY + "="
                 + NOCACHE_VALUE + "&" + COUNTRY_KEY + "=" + COUNTRY_VALUE + "&"
                 + LANG_KEY + "=" + DEFAULT_LANG_VALUE + "&" + VIEW_KEY + "="
-                + VIEW_VALUE;
+                + VIEW_VALUE + "&" + PERMISSION_KEY + "=" + PERMISSION_VALUE;
+    }
+    
+    private static String encode(String s) {
+        try {
+            return URLEncoder.encode(s, "UTF-8");
+        } catch (UnsupportedEncodingException e) {
+            log.error(e);
+            return "";
+        }
     }
 
 }

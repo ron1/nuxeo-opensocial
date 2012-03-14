@@ -43,4 +43,15 @@ public class OpenSocialPresenterTest {
                 "url?container=test&nocache=test&country=test&lang=fr_fr&view=canvas&mid=test&parent=test&permission=test&url=test&up_defaultFolder=test&up_0&debug=0&st=test&rpctoken=test",
                 newOpenSocialUrl);
     }
+
+    @Test
+    public void iCanChangePermissionsParam() {
+        String newOpenSocialUrl = OpenSocialPresenter.changeParam(
+                opensocialUrl, OpenSocialPresenter.OS_PERMISSIONS_ATTRIBUTE, "%5BEverything%5D");
+
+        assertEquals(
+                "url?container=test&nocache=test&country=test&lang=fr_fr&view=test&mid=test&parent=test&permission=%5BEverything%5D&url=test&up_defaultFolder=test&up_0&debug=0&st=test&rpctoken=test",
+                newOpenSocialUrl);
+    }
+
 }
